@@ -3,6 +3,8 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Svg exposing (..)
+import Svg.Attributes exposing (..)
 import Random exposing (generate)
 
 
@@ -24,10 +26,21 @@ type alias Model =
     { dieFace : Int }
 
 
+
+--circle : List (Attribute msg) -> List (Svg msg)
+
+
+fullCircle =
+    svg
+        [ viewBox "0 0 100 100", Svg.Attributes.width "20px" ]
+        [ circle [ cx "50", cy "50", r "45", fill "#0B79CE" ] []
+        ]
+
+
 view : Model -> Html Msg
 view model =
     div
-        [ style
+        [ Html.Attributes.style
             [ ( "text-align", "center" )
             , ( "display", "flex" )
             , ( "flex-direction", "column" )
@@ -37,8 +50,9 @@ view model =
             , ( "height", "100%" )
             ]
         ]
-        [ div [ style dieStyle ] [ text (toString model.dieFace) ]
-        , button [ onClick Roll, style buttonStyle ] [ text "Roll" ]
+        [ div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace) ]
+        , fullCircle
+        , button [ onClick Roll, Html.Attributes.style buttonStyle ] [ Html.text "Roll" ]
         ]
 
 

@@ -19,11 +19,11 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model 1, Cmd.none )
+    ( Model 1 1, Cmd.none )
 
 
 type alias Model =
-    { dieFace : Int }
+    { dieFace1 : Int, dieFace2 : Int }
 
 
 
@@ -50,10 +50,15 @@ view model =
             , ( "height", "100%" )
             ]
         ]
-        [ div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace) ]
+        [ div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace1) ]
         , fullCircle
         , button [ onClick Roll, Html.Attributes.style buttonStyle ] [ Html.text "Roll" ]
         ]
+
+
+
+--div
+--[ Html.text (toString model.dieFace2) ]
 
 
 buttonStyle : List ( String, String )
@@ -81,17 +86,25 @@ dieStyle =
 
 type Msg
     = Roll
-    | NewFace Int
+    | NewFace1 Int
+    | NewFace2 Int
+
+
+ran msg =
+    Random.generate msg (Random.int 1 6)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            ( model, Random.generate NewFace (Random.int 1 6) )
+            ( model, Cmd.batch [ ran NewFace1, ran NewFace2 ] )
 
-        NewFace newFace ->
-            ( Model newFace, Cmd.none )
+        NewFace1 newFace ->
+            ( { model | dieFace1 = newFace }, Cmd.none )
+
+        NewFace2 newFace ->
+            ( { model | dieFace2 = newFace }, Cmd.none )
 
 
 

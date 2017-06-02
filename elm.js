@@ -8261,7 +8261,9 @@ var _elm_lang$html$Html_Events$Options = F2(
 	});
 
 var _user$project$Main$viewValidation = function (model) {
-	var _p0 = _elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain) ? {ctor: '_Tuple2', _0: 'green', _1: 'OK'} : {ctor: '_Tuple2', _0: 'red', _1: 'passwords do not Match!'};
+	var _p0 = _elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain) ? {ctor: '_Tuple2', _0: 'green', _1: 'OK'} : ((_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(model.password),
+		8) < 0) ? {ctor: '_Tuple2', _0: 'yellow', _1: 'Color is too short'} : {ctor: '_Tuple2', _0: 'red', _1: 'passwords do not Match!'});
 	var color = _p0._0;
 	var message = _p0._1;
 	return A2(

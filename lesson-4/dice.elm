@@ -43,15 +43,18 @@ view model =
         [ Html.Attributes.style
             [ ( "text-align", "center" )
             , ( "display", "flex" )
-            , ( "flex-direction", "column" )
             , ( "align-items", "center" )
+            , ( "flex-direction", "column" )
             , ( "justify-content", "center" )
+            , ( "margin", "0.4em" )
             , ( "width", "100%" )
             , ( "height", "100%" )
             ]
         ]
-        [ div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace1) ]
-        , fullCircle
+        [ div [ Html.Attributes.style [ ( "display", "flex" ) ] ]
+            [ div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace1), fullCircle ]
+            , div [ Html.Attributes.style dieStyle ] [ Html.text (toString model.dieFace2), fullCircle ]
+            ]
         , button [ onClick Roll, Html.Attributes.style buttonStyle ] [ Html.text "Roll" ]
         ]
 
@@ -80,7 +83,12 @@ dieStyle =
     , ( "box-shadow", "0 1px 0 grey" )
     , ( "width", "10rem" )
     , ( "height", "10rem" )
-    , ( "margin-bottom", "2rem" )
+    , ( "margin", "1rem" )
+    , ( "font-size", "1.3em" )
+    , ( "display", "flex" )
+    , ( "align-items", "center" )
+    , ( "justify-content", "center" )
+    , ( "font-family", "Helvetica" )
     ]
 
 

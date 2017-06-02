@@ -49,7 +49,6 @@ update msg model =
 
         PasswordAgain password ->
             { model | passwordAgain = password }
-
         Age age ->
             { model | age = age }
 

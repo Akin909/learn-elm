@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Http exposing (..)
 import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onInput, onClick)
 import Html.Attributes exposing (..)
 import Json.Decode as Decode
 import String exposing (..)
@@ -25,12 +25,13 @@ main =
 type alias Model =
     { topic : String
     , gifUrl : String
+    , error : String
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model "dogs" "stuff.gif", Cmd.none )
+    ( Model "dogs" "stuff.gif" "", Cmd.none )
 
 
 
@@ -57,6 +58,7 @@ decodeGifUrl =
 type Msg
     = MorePlease
     | NewGif (Result Http.Error String)
+    | NewContent String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -69,7 +71,10 @@ update msg model =
             ( { model | gifUrl = newUrl }, Cmd.none )
 
         NewGif (Err _) ->
-            ( model, Cmd.none )
+            ( { model | error = "Woops something went wrong!!" }, Cmd.none )
+
+        NewContent content ->
+            ( { model | topic = content }, Cmd.none )
 
 
 
@@ -81,8 +86,8 @@ divStyle =
     , ( "flex-direction", "column" )
     , ( "justify-content", "space-around" )
     , ( "align-items", "center" )
-    , ( "background-color", "palevioletred" )
-    , ( "height", "100%" )
+    , ( "background-color", "whitesmoke" )
+    , ( "min-height", "100%" )
     , ( "width", "100%" )
     ]
 
@@ -100,20 +105,37 @@ buttonStyle =
     [ ( "width", "4rem" )
     , ( "margin-bottom", "4em" )
     , ( "border", "none" )
+    , ( "background-color", "palevioletred" )
     , ( "box-shadow", "0 1px 0 rgba(0, 0, 0, 0.5)" )
     ]
 
 
 inputStyle =
-    [ ( "width", "10em" )
+    [ ( "width", "20em" )
     , ( "height", "1.3em" )
     , ( "border", "none" )
     , ( "padding", "0.5em" )
+    , ( "margin-bottom", "1rem" )
     ]
 
 
 gifStyle =
-    [ ( " width", "50%" ) ]
+    [ ( "width", "50%" )
+    , ( "box-shadow", "0 1px 0 rgba(0, 0, 0, 0.5)" )
+    , ( "margin-top", "1rem" )
+    ]
+
+
+headerStyle =
+    [ ( "width", "100%" )
+    , ( "top", "0" )
+    , ( "background-color", "palevioletred" )
+    , ( "position", "absolute" )
+    , ( "display", "flex" )
+    , ( "flex-direction", "column" )
+    , ( "align-items", "center" )
+    , ( "box-shadow", "0 1px 1px rgba(0, 0, 0, 0.5)" )
+    ]
 
 
 capitalise : String -> String
@@ -129,8 +151,11 @@ capitalise word =
 view : Model -> Html Msg
 view model =
     div [ style divStyle ]
-        [ input [ style inputStyle, placeholder "Type in a subject" ] []
-        , h2 [ style title ] [ text (capitalise model.topic) ]
+        [ Html.header [ style headerStyle ]
+            [ h2 [ style title ] [ text (capitalise model.topic) ]
+            , input [ style inputStyle, placeholder "Type in a subject", onInput NewContent ] []
+            ]
+        , span [] [ text model.error ]
         , img [ src model.gifUrl, style gifStyle ] []
         , button [ style buttonStyle, onClick MorePlease ] [ text "More Please!" ]
         ]

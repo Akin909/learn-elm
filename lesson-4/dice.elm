@@ -5,6 +5,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Animation exposing (..)
+import Time exposing (second)
 import Random exposing (generate)
 
 
@@ -37,6 +39,10 @@ fullCircle =
         ]
 
 
+myAnim =
+    animation 0 |> from 100 |> to 300 |> duration (4 * second) |> delay (1 * second) List.map (\t -> animate (t * second) myAnim [0..6])
+
+
 view : Model -> Html Msg
 view model =
     div
@@ -57,11 +63,6 @@ view model =
             ]
         , button [ onClick Roll, Html.Attributes.style buttonStyle ] [ Html.text "Roll" ]
         ]
-
-
-
---div
---[ Html.text (toString model.dieFace2) ]
 
 
 buttonStyle : List ( String, String )
@@ -89,6 +90,7 @@ dieStyle =
     , ( "align-items", "center" )
     , ( "justify-content", "center" )
     , ( "font-family", "Helvetica" )
+    , ( "animation", myAnim )
     ]
 
 
